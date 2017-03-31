@@ -1,17 +1,20 @@
 package demo.workflow;
 
 import demo.page.HasMainNavigation;
+import demo.page.ShopSearchPage;
 
 
-public class LoginFlow {
+public class LoginFlow extends ShopFlow{
 
-    private final HasMainNavigation hasMainNavigation;
-
-    public LoginFlow(HasMainNavigation hasMainNavigation) {
-        this.hasMainNavigation = hasMainNavigation;
+    public ShopSearchPage login(String customerUsername, String customerPassword) {
+        return navigation.navToLogin()
+            .setUsername(customerUsername)
+            .setPassword(customerPassword)
+            .clickLogin();
     }
 
-    public void login(String customerUsername, String customerPassword) {
-
+    public LoginFlow from(HasMainNavigation hasMainNavigation) {
+        navigation = hasMainNavigation.navBar();
+        return this;
     }
 }
