@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import info.novatec.testit.webtester.browser.Browser;
-import info.novatec.testit.webtester.browser.factories.FirefoxFactory;
+import info.novatec.testit.webtester.browser.factories.MarionetteFactory;
 import info.novatec.testit.webtester.junit.annotations.ConfigurationValue;
 import info.novatec.testit.webtester.junit.annotations.CreateUsing;
 import info.novatec.testit.webtester.junit.annotations.EntryPoint;
@@ -20,10 +20,10 @@ public class ShopTestJunit4 {
     String customerUsername;
     @ConfigurationValue("customer.password")
     String customerPassword;
+
     @Resource
-    @CreateUsing(FirefoxFactory.class)
-    //TODO
-    @EntryPoint("localhost:3000")
+    @CreateUsing(MarionetteFactory.class)
+    @EntryPoint("${entrypoint.main}")
     private Browser firefox;
 
     @Test

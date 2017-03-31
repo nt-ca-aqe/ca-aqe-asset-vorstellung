@@ -1,11 +1,13 @@
 package info.novatec.testit.webtesterdemo.junit5;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import demo.page.ShopLoginPage;
+import demo.page.ShopOverviewPage;
+import demo.workflow.LoginFlow;
 
 import info.novatec.testit.webtester.browser.Browser;
-import info.novatec.testit.webtester.browser.factories.FirefoxFactory;
+import info.novatec.testit.webtester.browser.factories.MarionetteFactory;
 import info.novatec.testit.webtester.junit5.EnableWebTesterExtensions;
 import info.novatec.testit.webtester.junit5.extensions.browsers.CreateBrowsersUsing;
 import info.novatec.testit.webtester.junit5.extensions.browsers.EntryPoint;
@@ -15,25 +17,32 @@ import info.novatec.testit.webtester.junit5.extensions.pages.Initialized;
 
 
 @EnableWebTesterExtensions
-@CreateBrowsersUsing(FirefoxFactory.class)
+@CreateBrowsersUsing(MarionetteFactory.class)
 class ShopTestJunit5 {
 
     @Managed("Firefox")
-    //TODO
-    @EntryPoint("${properties.url}")
-    Browser firefox;
+    @EntryPoint("${entrypoint.main}")
+    private static Browser firefox;
 
-    @Initialized(source = "browser-1")
-    ShopLoginPage loginPage;
+    @Initialized(source = "Firefox")
+    private ShopOverviewPage shopOverview;
 
     @ConfigurationValue("customer.username")
-    String customerUsername;
+    private String customerUsername;
 
     @ConfigurationValue("customer.password")
-    String customerPassword;
+    private String customerPassword;
+
+    private LoginFlow loginFlow;
+
+    @BeforeAll
+    void setup() {
+        loginFlow = new LoginFlow(shopOverview);
+    }
 
     @Test
     void loginTest() {
 
+        loginFlow.login(customerUsername, customerPassword);
     }
 }
