@@ -3,14 +3,14 @@ package info.novatec.testit.webtesterdemo.junit5;
 import static info.novatec.testit.webtester.support.assertj.WebTesterAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import demo.page.ShopBasketPage;
 import demo.page.ShopSearchPage;
-import demo.workflow.LoginFlow;
-import demo.workflow.ShoppingFlow;
+import demo.workflow.BasketFlow;
+import demo.workflow.ShopFlow;
 
 import info.novatec.testit.webtester.browser.Browser;
 import info.novatec.testit.webtester.browser.factories.ChromeFactory;
@@ -28,42 +28,50 @@ class ShopTestJunit5 {
 
     @Managed("Chrome")
     @EntryPoint("${entrypoint.main}")
-    private static Browser firefox;
+    private static Browser chrome;
 
     @Initialized(source = "Chrome")
-    private ShopSearchPage shopSearchPage;
+    ShopSearchPage shopSearchPage;
 
     @ConfigurationValue(source = "Chrome", value = "customer.username")
-    private String customerUsername;
+    String customerUsername;
 
     @ConfigurationValue(source = "Chrome", value = "customer.password")
-    private String customerPassword;
+    String customerPassword;
 
-    private LoginFlow loginFlow;
-    private ShoppingFlow shoppingFlow;
-
-    @BeforeEach
-    void setup() {
-        loginFlow = new LoginFlow();
+    @AfterEach
+    void tearDown() {
+        ShopFlow.logout(chrome);
     }
+}
+
+class LoginTests extends ShopTestJunit5 {
 
     @Test
     @DisplayName("Verifies successful login of the testuser")
     void successfulLoginTest() {
-        shopSearchPage = loginFlow.from(shopSearchPage).login(customerUsername, customerPassword);
+        shopSearchPage = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
         assertThat(shopSearchPage.navBar().logout()).isVisible();
+    }
+}
+
+class BasketTests extends ShopTestJunit5 {
+
+    @BeforeEach
+    void setup() {
+        shopSearchPage = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
     }
 
     @Test
-    @DisplayName("Add 3 random items to basket")
+    @DisplayName("Add 3 random items to basket and delete them")
     void canAddItemsToBasket() {
         int itemCount = 3;
-        shoppingFlow = new ShoppingFlow();
-        shopSearchPage = loginFlow.from(shopSearchPage).login(customerUsername, customerPassword);
-        ShopBasketPage basketPage =
-            shoppingFlow.with(shopSearchPage).addRandomItemsToBasket(itemCount).navigateTo(ShopBasketPage.class);
 
-        assertThat(basketPage.items().count()).isEqualTo(itemCount);
+        BasketFlow basketFlow = ShopFlow.from(shopSearchPage).addRandomItemsToBasket(itemCount).navigateToBasket();
+        assertThat(basketFlow.itemCount()).isEqualTo(itemCount);
+
+        basketFlow.clearBasket();
+
+        assertThat(basketFlow.itemCount()).isEqualTo(0);
     }
-
 }

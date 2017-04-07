@@ -12,6 +12,6 @@ public interface ShopSearchPage extends Page, HasMainNavigation, HasItemTable {
     default Stream<ShopSearchItemRow> items() {
         return itemTable().findBy(css("tr"))
             .asMany(ShopSearchItemRow.class)
-            .filter(row -> row.addToBasket().isVisible());
+            .filter(row -> row.addToBasket().isPresent());
     }
 }

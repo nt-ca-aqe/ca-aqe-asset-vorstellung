@@ -7,6 +7,7 @@ import info.novatec.testit.webtester.pagefragments.annotations.IdentifyUsing;
 
 public interface ShopSearchItemRow extends TableRow{
 
-    @IdentifyUsing("a:nth-child(2)")
+    @IdentifyUsing(".btn[ng-click^='addToBasket']")
     Link addToBasket();
 }
+

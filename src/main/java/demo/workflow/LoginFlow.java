@@ -4,17 +4,13 @@ import demo.page.HasMainNavigation;
 import demo.page.ShopSearchPage;
 
 
-public class LoginFlow extends ShopFlow{
+public class LoginFlow extends ShopFlow {
 
-    public ShopSearchPage login(String customerUsername, String customerPassword) {
-        return navigation.navToLogin()
-            .setUsername(customerUsername)
-            .setPassword(customerPassword)
-            .clickLogin();
+    LoginFlow(HasMainNavigation hasMainNavigation) {
+        super(hasMainNavigation);
     }
 
-    public LoginFlow from(HasMainNavigation hasMainNavigation) {
-        navigation = hasMainNavigation.navBar();
-        return this;
+    public ShopSearchPage login(String customerUsername, String customerPassword) {
+        return navigationPage.navBar().navToLogin().setUsername(customerUsername).setPassword(customerPassword).clickLogin();
     }
 }
