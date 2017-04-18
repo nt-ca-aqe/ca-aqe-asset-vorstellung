@@ -3,6 +3,8 @@ package info.novatec.testit.webtesterdemo.junit5;
 import static info.novatec.testit.webtester.support.assertj.WebTesterAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +23,7 @@ import info.novatec.testit.webtester.junit5.extensions.browsers.EntryPoint;
 import info.novatec.testit.webtester.junit5.extensions.browsers.Managed;
 import info.novatec.testit.webtester.junit5.extensions.configuration.ConfigurationValue;
 import info.novatec.testit.webtester.junit5.extensions.pages.Initialized;
+import info.novatec.testit.webtester.waiting.Wait;
 
 
 @EnableWebTesterExtensions
@@ -71,6 +74,7 @@ class SearchResultTests extends  ShopTestJunit5 {
         int expectedAmount = 2;
 
         searchResultFlow.searchFor(searchTerm);
+        Wait.exactly(1, TimeUnit.SECONDS);
         assertThat(searchResultFlow.itemCount()).isEqualTo(expectedAmount);
     }
 }
