@@ -15,17 +15,12 @@ public class ShopFlow {
         this.navigationPage = hasMainNavigation;
     }
 
-    public BasketFlow navigateToBasket() {
-        ShopBasketPage shopBasketPage = navigationPage.navBar().navToBasket();
-        return from(shopBasketPage);
-    }
-
-    private BasketFlow from(ShopBasketPage shopBasketPage) {
+    public static BasketFlow from(ShopBasketPage shopBasketPage) {
         return new BasketFlow(shopBasketPage);
     }
 
-    public static SearchFlow from(ShopSearchPage shopSearchPage) {
-        return new SearchFlow(shopSearchPage);
+    public static SearchResultFlow from(ShopSearchPage shopSearchPage) {
+        return new SearchResultFlow(shopSearchPage);
     }
 
     public static LoginFlow loginFrom(HasMainNavigation hasMainNavigation) {
@@ -35,5 +30,15 @@ public class ShopFlow {
     public static void logout(Browser browser) {
         HasMainNavigation hasMainNavigation = browser.create(HasMainNavigation.class);
         hasMainNavigation.navBar().logout().click();
+    }
+
+    public BasketFlow navigateToBasket() {
+        ShopBasketPage shopBasketPage = navigationPage.navBar().navToBasket();
+        return from(shopBasketPage);
+    }
+
+    public SearchResultFlow searchFor(String searchString) {
+        ShopSearchPage shopSearchPage = navigationPage.navBar().searchTerm(searchString).search();
+        return new SearchResultFlow(shopSearchPage);
     }
 }

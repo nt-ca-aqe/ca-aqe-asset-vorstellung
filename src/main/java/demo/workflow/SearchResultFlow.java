@@ -8,16 +8,16 @@ import demo.page.ShopSearchPage;
 import demo.pagefragments.searchpage.ShopSearchItemRow;
 
 
-public class SearchFlow extends ShopFlow {
+public class SearchResultFlow extends ShopFlow {
 
     private ShopSearchPage shopSearchPage;
 
-    SearchFlow(ShopSearchPage shopSearchPage) {
+    SearchResultFlow(ShopSearchPage shopSearchPage) {
         super(shopSearchPage);
         this.shopSearchPage = shopSearchPage;
     }
 
-    public SearchFlow addRandomItemsToBasket(int itemCount) {
+    public SearchResultFlow addRandomItemsToBasket(int itemCount) {
         List<ShopSearchItemRow> randomItems =
             shopSearchPage.items().collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
                 Collections.shuffle(list);
