@@ -58,6 +58,7 @@ class LoginTests extends ShopTestJunit5 {
         assertThat(login.getNavigation().logout()).isVisible();
     }
 }
+
 class SearchResultTests extends  ShopTestJunit5 {
 
     private SearchResultFlow searchResultFlow;
@@ -78,6 +79,7 @@ class SearchResultTests extends  ShopTestJunit5 {
         assertThat(searchResultFlow.itemCount()).isEqualTo(expectedAmount);
     }
 }
+
 class BasketTests extends ShopTestJunit5 {
 
     private SearchResultFlow searchResultFlow;

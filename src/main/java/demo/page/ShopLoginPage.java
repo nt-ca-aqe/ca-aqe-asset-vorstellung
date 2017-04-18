@@ -1,5 +1,7 @@
 package demo.page;
 
+import demo.page.shared.HasMainNavigation;
+
 import info.novatec.testit.webtester.pagefragments.Button;
 import info.novatec.testit.webtester.pagefragments.PasswordField;
 import info.novatec.testit.webtester.pagefragments.TextField;

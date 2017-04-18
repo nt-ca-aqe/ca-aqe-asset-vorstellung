@@ -1,4 +1,4 @@
-package demo.page;
+package demo.page.shared;
 
 import demo.pagefragments.MainNavigation;
 

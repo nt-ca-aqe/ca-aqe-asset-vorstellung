@@ -4,6 +4,8 @@ import static info.novatec.testit.webtester.pagefragments.identification.ByProdu
 
 import java.util.stream.Stream;
 
+import demo.page.shared.HasItemTable;
+import demo.page.shared.HasMainNavigation;
 import demo.pagefragments.basketpage.ShopBasketItemRow;
 
 import info.novatec.testit.webtester.conditions.pagefragments.PresentAndVisible;

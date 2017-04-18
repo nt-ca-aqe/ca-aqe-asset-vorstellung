@@ -1,6 +1,6 @@
 package demo.workflow;
 
-import demo.page.HasMainNavigation;
+import demo.page.shared.HasMainNavigation;
 import demo.page.ShopSearchPage;
 
 

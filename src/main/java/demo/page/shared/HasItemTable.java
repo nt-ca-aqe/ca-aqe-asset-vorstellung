@@ -1,4 +1,4 @@
-package demo.page;
+package demo.page.shared;
 
 import info.novatec.testit.webtester.pagefragments.Table;
 import info.novatec.testit.webtester.pagefragments.annotations.IdentifyUsing;
