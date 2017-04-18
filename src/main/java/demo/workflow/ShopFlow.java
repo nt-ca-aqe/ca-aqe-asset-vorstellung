@@ -3,6 +3,7 @@ package demo.workflow;
 import demo.page.HasMainNavigation;
 import demo.page.ShopBasketPage;
 import demo.page.ShopSearchPage;
+import demo.pagefragments.MainNavigation;
 
 import info.novatec.testit.webtester.browser.Browser;
 
@@ -33,12 +34,16 @@ public class ShopFlow {
     }
 
     public BasketFlow navigateToBasket() {
-        ShopBasketPage shopBasketPage = navigationPage.navBar().navToBasket();
+        ShopBasketPage shopBasketPage = getNavigation().navToBasket();
         return from(shopBasketPage);
     }
 
     public SearchResultFlow searchFor(String searchString) {
-        ShopSearchPage shopSearchPage = navigationPage.navBar().searchTerm(searchString).search();
+        ShopSearchPage shopSearchPage = getNavigation().searchTerm(searchString).search();
         return new SearchResultFlow(shopSearchPage);
+    }
+
+    public MainNavigation getNavigation() {
+        return navigationPage.navBar();
     }
 }

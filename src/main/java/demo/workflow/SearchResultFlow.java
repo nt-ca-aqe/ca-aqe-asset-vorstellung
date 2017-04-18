@@ -27,4 +27,8 @@ public class SearchResultFlow extends ShopFlow {
         randomItems.forEach(item -> item.addToBasket().click());
         return this;
     }
+
+    public long itemCount() {
+        return shopSearchPage.items().count();
+    }
 }

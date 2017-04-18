@@ -10,7 +10,9 @@ public class LoginFlow extends ShopFlow {
         super(hasMainNavigation);
     }
 
-    public ShopSearchPage login(String customerUsername, String customerPassword) {
-        return navigationPage.navBar().navToLogin().setUsername(customerUsername).setPassword(customerPassword).clickLogin();
+    public SearchResultFlow login(String customerUsername, String customerPassword) {
+        ShopSearchPage shopSearchPage =
+            navigationPage.navBar().navToLogin().setUsername(customerUsername).setPassword(customerPassword).clickLogin();
+        return new SearchResultFlow(shopSearchPage);
     }
 }

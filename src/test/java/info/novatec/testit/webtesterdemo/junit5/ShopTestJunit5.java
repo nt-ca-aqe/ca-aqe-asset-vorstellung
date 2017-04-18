@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import demo.page.ShopSearchPage;
 import demo.workflow.BasketFlow;
+import demo.workflow.SearchResultFlow;
 import demo.workflow.ShopFlow;
 
 import info.novatec.testit.webtester.browser.Browser;
@@ -50,16 +51,36 @@ class LoginTests extends ShopTestJunit5 {
     @Test
     @DisplayName("Verifies successful login of the testuser")
     void successfulLoginTest() {
-        shopSearchPage = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
-        assertThat(shopSearchPage.navBar().logout()).isVisible();
+        SearchResultFlow login = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+        assertThat(login.getNavigation().logout()).isVisible();
     }
 }
+class SearchResultTests extends  ShopTestJunit5 {
 
-class BasketTests extends ShopTestJunit5 {
+    private SearchResultFlow searchResultFlow;
+    private final String searchTerm = "apple";
 
     @BeforeEach
     void setup() {
-        shopSearchPage = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+        searchResultFlow = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+    }
+
+    @Test
+    @DisplayName("Seaching for "+searchTerm+" returns the appropriate amount")
+    void opensAndCollapsesPaymentOptions() {
+        int expectedAmount = 2;
+
+        searchResultFlow.searchFor(searchTerm);
+        assertThat(searchResultFlow.itemCount()).isEqualTo(expectedAmount);
+    }
+}
+class BasketTests extends ShopTestJunit5 {
+
+    private SearchResultFlow searchResultFlow;
+
+    @BeforeEach
+    void setup() {
+        searchResultFlow = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
     }
 
     @Test
@@ -67,7 +88,7 @@ class BasketTests extends ShopTestJunit5 {
     void canAddItemsToBasket() {
         int itemCount = 3;
 
-        BasketFlow basketFlow = ShopFlow.from(shopSearchPage).addRandomItemsToBasket(itemCount).navigateToBasket();
+        BasketFlow basketFlow = searchResultFlow.addRandomItemsToBasket(itemCount).navigateToBasket();
         assertThat(basketFlow.itemCount()).isEqualTo(itemCount);
 
         basketFlow.clearBasket();
