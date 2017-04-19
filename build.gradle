@@ -1,7 +1,7 @@
 group 'info.novatec.testit'
 version '1.0-SNAPSHOT'
 
-def webtesterVersion    = '2.1.2'
+def webtesterVersion    = '2.2.0'
 def livingdocVersion    = '1.3.2'
 def junit5Version       = '5.0.0-M3'
 def seleniumVersion     = '3.3.1'
