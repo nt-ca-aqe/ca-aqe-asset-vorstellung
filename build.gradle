@@ -40,3 +40,7 @@ dependencies {
     //Selenium
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: seleniumVersion
 }
+
+tasks.withType(Test){
+    systemProperty 'webdriver.chrome.driver', 'C:\\drivers\\chrome\\chromedriver.exe'
+}

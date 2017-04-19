@@ -1,5 +1,7 @@
 package info.novatec.testit.webtesterdemo.junit5;
 
+import static demo.workflow.ShopFlow.loginFrom;
+import static demo.workflow.ShopFlow.logout;
 import static info.novatec.testit.webtester.support.assertj.WebTesterAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import demo.page.ShopSearchPage;
 import demo.workflow.BasketFlow;
 import demo.workflow.SearchResultFlow;
-import demo.workflow.ShopFlow;
 
 import info.novatec.testit.webtester.browser.Browser;
 import info.novatec.testit.webtester.browser.factories.ChromeFactory;
@@ -45,7 +46,7 @@ class ShopTestJunit5 {
 
     @AfterEach
     void tearDown() {
-        ShopFlow.logout(chrome);
+        logout(chrome);
     }
 }
 
@@ -54,7 +55,7 @@ class LoginTests extends ShopTestJunit5 {
     @Test
     @DisplayName("Verifies successful login of the testuser")
     void successfulLoginTest() {
-        SearchResultFlow login = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+        SearchResultFlow login = loginFrom(shopSearchPage).login(customerUsername, customerPassword);
         assertThat(login.getNavigation().logout()).isVisible();
     }
 }
@@ -66,7 +67,7 @@ class SearchResultTests extends  ShopTestJunit5 {
 
     @BeforeEach
     void setup() {
-        searchResultFlow = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+        searchResultFlow = loginFrom(shopSearchPage).login(customerUsername, customerPassword);
     }
 
     @Test
@@ -86,7 +87,7 @@ class BasketTests extends ShopTestJunit5 {
 
     @BeforeEach
     void setup() {
-        searchResultFlow = ShopFlow.loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+        searchResultFlow = loginFrom(shopSearchPage).login(customerUsername, customerPassword);
     }
 
     @Test
