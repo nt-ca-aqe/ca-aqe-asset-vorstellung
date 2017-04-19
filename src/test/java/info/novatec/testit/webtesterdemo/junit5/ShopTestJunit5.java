@@ -2,11 +2,16 @@ package info.novatec.testit.webtesterdemo.junit5;
 
 import static demo.workflow.ShopFlow.loginFrom;
 import static demo.workflow.ShopFlow.logout;
+import static info.novatec.testit.AlertMatchers.containsNoHighRiskAlerts;
 import static info.novatec.testit.webtester.support.assertj.WebTesterAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.concurrent.TimeUnit;
 
+import info.novatec.testit.AlertList;
+import info.novatec.testit.ZapScannerConfiguration;
+import info.novatec.testit.ZapSecurityScanExtension;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,10 +30,12 @@ import info.novatec.testit.webtester.junit5.extensions.browsers.Managed;
 import info.novatec.testit.webtester.junit5.extensions.configuration.ConfigurationValue;
 import info.novatec.testit.webtester.junit5.extensions.pages.Initialized;
 import info.novatec.testit.webtester.waiting.Wait;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 
 @EnableWebTesterExtensions
-@CreateBrowsersUsing(ChromeFactory.class)
+@ExtendWith(ZapSecurityScanExtension.class)
+@CreateBrowsersUsing(value = ChromeFactory.class, proxy = MyProxyConfiguration.class)
 class ShopTestJunit5 {
 
     @Managed("Chrome")
@@ -44,6 +51,7 @@ class ShopTestJunit5 {
     @ConfigurationValue(source = "Chrome", value = "customer.password")
     String customerPassword;
 
+
     @AfterEach
     void tearDown() {
         logout(chrome);
@@ -52,12 +60,30 @@ class ShopTestJunit5 {
 
 class LoginTests extends ShopTestJunit5 {
 
+    protected ZapScannerConfiguration configuration = new ZapScannerConfiguration(
+            "http://localhost:3000/", "afe",
+            "localhost", "8085", "", false, false);
+
+
     @Test
     @DisplayName("Verifies successful login of the testuser")
     void successfulLoginTest() {
+        configuration.setBaseUrl("http://localhost:3000/rest");
+        configuration.setInScopeOnly(true);
         SearchResultFlow login = loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+
+        Wait.exactly(500, TimeUnit.MILLISECONDS);
+
         assertThat(login.getNavigation().logout()).isVisible();
     }
+
+    @AfterEach
+    void afterTest(AlertList alertList) {
+        Assert.assertThat ( "Tested workflow should have no high risk alerts",
+                alertList.getAlerts(),
+                containsNoHighRiskAlerts () );
+    }
+
 }
 
 class SearchResultTests extends  ShopTestJunit5 {

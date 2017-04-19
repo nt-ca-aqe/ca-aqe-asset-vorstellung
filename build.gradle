@@ -12,6 +12,7 @@ apply plugin: 'idea'
 sourceCompatibility = 1.8
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -27,6 +28,7 @@ dependencies {
     //livingdoc
     testCompile group: 'info.novatec.testit', name: 'livingdoc', version: livingdocVersion
     //security
+    testCompile group: 'info.novatec.testit', name: 'securitytester-junit5', version: '0.1-SNAPSHOT'
 
     /*
      * Additional test libraries
