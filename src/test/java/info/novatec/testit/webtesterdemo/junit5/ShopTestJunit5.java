@@ -51,6 +51,9 @@ class ShopTestJunit5 {
     @ConfigurationValue(source = "Chrome", value = "customer.password")
     String customerPassword;
 
+    protected ZapScannerConfiguration configuration = new ZapScannerConfiguration(
+            "http://192.168.99.100:32768", "afe",
+            "localhost", "8085", "", false, false);
 
     @AfterEach
     void tearDown() {
@@ -60,19 +63,12 @@ class ShopTestJunit5 {
 
 class LoginTests extends ShopTestJunit5 {
 
-    protected ZapScannerConfiguration configuration = new ZapScannerConfiguration(
-            "http://localhost:3000/", "afe",
-            "localhost", "8085", "", false, false);
-
-
     @Test
     @DisplayName("Verifies successful login of the testuser")
     void successfulLoginTest() {
-        configuration.setBaseUrl("http://localhost:3000/rest");
+        configuration.setBaseUrl("http://192.168.99.100:32768/rest");
         configuration.setInScopeOnly(true);
         SearchResultFlow login = loginFrom(shopSearchPage).login(customerUsername, customerPassword);
-
-        Wait.exactly(500, TimeUnit.MILLISECONDS);
 
         assertThat(login.getNavigation().logout()).isVisible();
     }
@@ -99,6 +95,7 @@ class SearchResultTests extends  ShopTestJunit5 {
     @Test
     @DisplayName("Seaching for "+searchTerm+" returns the appropriate amount")
     void opensAndCollapsesPaymentOptions() {
+
         int expectedAmount = 2;
 
         searchResultFlow.searchFor(searchTerm);
