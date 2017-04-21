@@ -30,7 +30,9 @@ public class ShopFlow {
 
     public static void logout(Browser browser) {
         HasMainNavigation hasMainNavigation = browser.create(HasMainNavigation.class);
-        hasMainNavigation.navBar().logout().click();
+        if (hasMainNavigation.navBar().logout().isPresent()) {
+            hasMainNavigation.navBar().logout().click();
+        }
     }
 
     public BasketFlow navigateToBasket() {

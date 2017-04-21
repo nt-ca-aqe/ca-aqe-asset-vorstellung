@@ -64,13 +64,17 @@ class ShopTestJunit5 {
 class LoginTests extends ShopTestJunit5 {
 
     @Test
-    @DisplayName("Verifies successful login of the testuser")
-    void successfulLoginTest() {
+    @DisplayName("Verifies unsuccessful login of a user")
+    void unsuccessfulLoginTest() {
         configuration.setBaseUrl("http://192.168.99.100:32768/rest");
         configuration.setInScopeOnly(true);
-        SearchResultFlow login = loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+        SearchResultFlow login = loginFrom(shopSearchPage).login(
+                "admin@juice-sh.op",
+                "test12345678");
+        assertThat(login.getNavigation().login()).isVisible();
 
-        assertThat(login.getNavigation().logout()).isVisible();
+        //login = loginFrom(shopSearchPage).login(customerUsername, customerPassword);
+        //assertThat(login.getNavigation().logout()).isVisible();
     }
 
     @AfterEach
@@ -79,7 +83,6 @@ class LoginTests extends ShopTestJunit5 {
                 alertList.getAlerts(),
                 containsNoHighRiskAlerts () );
     }
-
 }
 
 class SearchResultTests extends  ShopTestJunit5 {
@@ -95,12 +98,21 @@ class SearchResultTests extends  ShopTestJunit5 {
     @Test
     @DisplayName("Seaching for "+searchTerm+" returns the appropriate amount")
     void opensAndCollapsesPaymentOptions() {
+        configuration.setBaseUrl("http://192.168.99.100:32768/rest/product/search");
+        configuration.setInScopeOnly(true);
 
         int expectedAmount = 2;
 
         searchResultFlow.searchFor(searchTerm);
         Wait.exactly(1, TimeUnit.SECONDS);
         assertThat(searchResultFlow.itemCount()).isEqualTo(expectedAmount);
+    }
+
+    @AfterEach
+    void afterTest(AlertList alertList) {
+        Assert.assertThat ( "Tested workflow should have no high risk alerts",
+                alertList.getAlerts(),
+                containsNoHighRiskAlerts () );
     }
 }
 
